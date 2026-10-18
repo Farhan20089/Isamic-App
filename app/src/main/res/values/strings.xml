@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">اسلامی ایپ</string>
+    <string name="azan_time">اذان کا وقت ہو گیا</string>
+    <string name="stop">بند کریں</string>
+</resources>

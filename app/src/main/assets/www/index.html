@@ -1,0 +1,902 @@
+<!doctype html>
+<html lang="ur">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Islamic App | اسلامی ایپ</title>
+<style>
+:root{--g:#0b6e4f;--g2:#08523b;--gold:#e8b931;--bg:#f4f8f5;--card:#fff;--tx:#14231c;--bad:#c0392b;--ok:#1e9e5a;--opt:#f0f5f2;--ghost:#e4efe9;--gtxt:#08523b;--mut:#456;--okbg:#d6f3e3;--badbg:#fbdcd8}
+body.dark{--bg:#0e1814;--card:#172620;--tx:#e8f2ec;--opt:#22362c;--ghost:#22362c;--gtxt:#9fe0c0;--mut:#9db5a8;--okbg:#1d5a3b;--badbg:#6a2a24}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:system-ui,"Noto Nastaliq Urdu","Segoe UI",sans-serif;background:var(--bg);color:var(--tx);min-height:100vh}
+.app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+header{background:linear-gradient(135deg,var(--g),var(--g2));color:#fff;padding:18px 16px;text-align:center}
+header h1{margin:0;font-size:22px}
+header small{opacity:.85}
+.stats{display:flex;justify-content:space-around;background:var(--g2);color:#fff;padding:8px;font-size:14px}
+main{flex:1;padding:16px}
+.card{background:var(--card);border-radius:16px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:14px}
+button{font:inherit;cursor:pointer;border:0}
+button:disabled{cursor:default}
+.btn{display:block;width:100%;padding:14px;border-radius:12px;background:var(--g);color:#fff;font-size:17px;margin:8px 0}
+.btn small{opacity:.8}
+.btn.gold{background:var(--gold);color:#3a2c00}
+.btn.ghost{background:var(--ghost);color:var(--gtxt)}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.lang{display:flex;gap:8px}
+.lang button{padding:6px 16px;border-radius:20px;background:var(--ghost);color:var(--gtxt)}
+.lang button.on{background:var(--g);color:#fff}
+.tools button{background:none;font-size:22px;padding:4px 8px}
+.q{font-size:20px;line-height:1.7;margin:6px 0 14px}
+.rtl{direction:rtl;text-align:right}
+.opt{display:block;width:100%;text-align:inherit;padding:13px 14px;margin:8px 0;border-radius:12px;background:var(--opt);color:var(--tx);font-size:17px;border:2px solid transparent}
+.opt:disabled{color:var(--tx)}
+.opt.right{background:var(--okbg);border-color:var(--ok)}
+.opt.wrong{background:var(--badbg);border-color:var(--bad)}
+.bar{height:8px;background:var(--ghost);border-radius:6px;overflow:hidden;margin-bottom:12px}
+.bar i{display:block;height:100%;background:var(--gold);width:0;transition:width .3s}
+.timer{font-weight:bold}
+.row{display:flex;justify-content:space-between;align-items:center;font-size:15px;margin-bottom:6px}
+.big{font-size:54px;text-align:center;margin:6px 0}
+.center{text-align:center}
+.ad{background:var(--ghost);border:1px dashed #aaa;border-radius:10px;padding:14px;text-align:center;font-size:12px;color:var(--mut);margin:10px 0}
+.hide{display:none}
+.exp{font-size:14px;color:var(--mut);margin-top:8px;line-height:1.6}
+.life{display:flex;gap:8px;margin-top:4px}
+.life button{flex:1;padding:10px;border-radius:10px;background:var(--ghost);color:var(--gtxt);font-size:14px}
+.life button:disabled{opacity:.4}
+.srow{display:flex;justify-content:space-between;margin:10px 0 4px;font-size:15px}
+.badges{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;text-align:center}
+.badge{font-size:28px}
+.badge small{display:block;font-size:11px;line-height:1.3;color:var(--mut)}
+.badge.lock{filter:grayscale(1);opacity:.35}
+.nav{position:sticky;bottom:0;display:flex;background:var(--card);border-top:1px solid rgba(128,128,128,.25);z-index:5}
+.nav button{flex:1;background:none;color:var(--mut);padding:8px 2px 10px;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.nav button span{font-size:20px}
+.nav button.on{color:var(--g);font-weight:bold}
+body.dark .nav button.on{color:var(--gold)}
+.prow{display:flex;align-items:center;justify-content:space-between;padding:10px 8px;border-bottom:1px solid rgba(128,128,128,.2);font-size:17px}
+.prow.nx{background:var(--okbg);border-radius:10px;border-bottom-color:transparent;font-weight:bold}
+.prow small{display:block;font-size:12px;color:var(--mut);font-weight:normal}
+.bell{background:none;font-size:20px;padding:2px 6px;color:var(--tx)}
+.nxbox{background:linear-gradient(135deg,var(--g),var(--g2));color:#fff;border-radius:16px;padding:16px;text-align:center;margin-bottom:14px}
+.ncd{font-size:38px;font-weight:bold;letter-spacing:2px;font-variant-numeric:tabular-nums;direction:ltr}
+.cgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;direction:ltr}
+.cgrid .wd{font-size:10px;text-align:center;color:var(--mut);padding:2px 0}
+.dc{position:relative;aspect-ratio:1;border-radius:10px;background:var(--opt);color:var(--tx);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:15px;line-height:1.1;padding:0}
+.dc small{font-size:10px;color:var(--mut)}
+.dc.fri{background:var(--ghost)}
+.dc.today{outline:2px solid var(--gold)}
+.dc.sel{background:var(--g);color:#fff}
+.dc.sel small{color:#dfe}
+.dc i{position:absolute;top:4px;right:4px;width:6px;height:6px;border-radius:50%;background:var(--bad)}
+.dc.empty{background:none}
+select{font:inherit;width:100%;padding:10px;border-radius:10px;background:var(--opt);color:var(--tx);border:1px solid rgba(128,128,128,.3);margin:6px 0}
+.setrow{display:flex;justify-content:space-between;align-items:center;padding:8px 0;gap:10px}
+.stp{display:flex;gap:6px;align-items:center}
+.stp button{width:34px;height:34px;border-radius:50%;background:var(--ghost);color:var(--gtxt);font-size:18px}
+.note{font-size:12px;color:var(--mut);line-height:1.7;margin-top:6px}
+.azov{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:20px;z-index:20}
+.azov.hide{display:none}
+.azov .card{max-width:360px;width:100%}
+label.btn input{display:none}
+.toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%) translateY(90px);background:#222;color:#fff;padding:10px 18px;border-radius:20px;opacity:0;transition:.3s;font-size:14px;max-width:90%;text-align:center;z-index:9}
+.toast.show{transform:translateX(-50%);opacity:1}
+.rv{border-bottom:1px solid rgba(128,128,128,.25);padding:8px 0}
+.rvok{color:var(--ok);font-weight:bold}
+h3{margin:4px 0 10px}
+</style>
+</head>
+<body>
+<div class="app">
+<header><h1>🕌 اسلامی ایپ · Islamic App</h1><small id="sub"></small></header>
+<div class="stats"><span>🔥 <b id="streak">0</b></span><span>🪙 <b id="coins">0</b></span><span>⭐ <b id="best">0</b></span><span>🏆 <b id="lvl">1</b></span></div>
+<main id="main"></main>
+<nav id="nav" class="nav"></nav>
+</div>
+<div id="azov" class="azov hide"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ====== TOPICS ====== */
+const CL={
+ Quran:{ur:"قرآن",en:"Quran",i:"📖"},
+ Seerah:{ur:"سیرت",en:"Seerah",i:"🕋"},
+ Sahaba:{ur:"صحابہ",en:"Companions",i:"🛡️"},
+ Ibadat:{ur:"عبادات",en:"Worship",i:"🤲"},
+ Anbiya:{ur:"انبیاء",en:"Prophets",i:"✨"},
+ General:{ur:"عمومی",en:"General",i:"🌍"}
+};
+
+/* ====== QUESTIONS: c=topic, o=[[ur,en],...], a=index of correct option ====== */
+const Q=[
+/* ---- Quran ---- */
+{c:"Quran",ur:"قرآن پاک میں کتنے پارے ہیں؟",en:"How many Juz (paras) are in the Quran?",o:[["20","20"],["30","30"],["40","40"],["114","114"]],a:1},
+{c:"Quran",ur:"قرآن پاک میں کل کتنی سورتیں ہیں؟",en:"How many surahs are in the Quran?",o:[["99","99"],["110","110"],["114","114"],["120","120"]],a:2},
+{c:"Quran",ur:"قرآن کی سب سے لمبی سورت کون سی ہے؟",en:"Which is the longest surah of the Quran?",o:[["سورۃ البقرہ","Al-Baqarah"],["سورۃ آل عمران","Aal-e-Imran"],["سورۃ النساء","An-Nisa"],["سورۃ یٰسین","Ya-Sin"]],a:0},
+{c:"Quran",ur:"قرآن کی سب سے چھوٹی سورت کون سی ہے؟",en:"Which is the shortest surah of the Quran?",o:[["سورۃ الاخلاص","Al-Ikhlas"],["سورۃ الکوثر","Al-Kawthar"],["سورۃ العصر","Al-Asr"],["سورۃ الفلق","Al-Falaq"]],a:1},
+{c:"Quran",ur:"قرآن کی پہلی نازل ہونے والی آیات کس سورت کی ہیں؟",en:"The first revealed verses belong to which surah?",o:[["سورۃ الفاتحہ","Al-Fatiha"],["سورۃ العلق","Al-Alaq"],["سورۃ المدثر","Al-Muddaththir"],["سورۃ البقرہ","Al-Baqarah"]],a:1},
+{c:"Quran",ur:"قرآن کی وہ کون سی سورت ہے جس کے شروع میں بسم اللہ نہیں ہے؟",en:"Which surah does not begin with Bismillah?",o:[["سورۃ التوبہ","At-Tawbah"],["سورۃ الانفال","Al-Anfal"],["سورۃ یونس","Yunus"],["سورۃ الکہف","Al-Kahf"]],a:0},
+{c:"Quran",ur:"قرآن کی کس سورت کا نام حضرت عیسیٰؑ کی والدہ کے نام پر ہے؟",en:"Which surah is named after the mother of Prophet Isa?",o:[["سورۃ مریم","Maryam"],["سورۃ النور","An-Nur"],["سورۃ الکہف","Al-Kahf"],["سورۃ یوسف","Yusuf"]],a:0},
+{c:"Quran",ur:"سورۃ الفاتحہ کو کس نام سے بھی پکارا جاتا ہے؟",en:"Surah Al-Fatiha is also known as:",o:[["اُمّ الکتاب","Umm al-Kitab"],["قلبِ قرآن","Heart of the Quran"],["سیدُ الاستغفار","Sayyid al-Istighfar"],["آیت الکرسی","Ayat al-Kursi"]],a:0},
+{c:"Quran",ur:"کون سی سورت ثواب میں ایک تہائی قرآن کے برابر ہے؟",en:"Which surah equals one-third of the Quran in reward?",o:[["سورۃ الاخلاص","Al-Ikhlas"],["سورۃ الفاتحہ","Al-Fatiha"],["سورۃ الکوثر","Al-Kawthar"],["سورۃ الناس","An-Nas"]],a:0},
+{c:"Quran",ur:"آیت الکرسی کس سورت میں ہے؟",en:"In which surah is Ayat al-Kursi?",o:[["سورۃ البقرہ","Al-Baqarah"],["سورۃ آل عمران","Aal-e-Imran"],["سورۃ النساء","An-Nisa"],["سورۃ المائدہ","Al-Ma'idah"]],a:0},
+{c:"Quran",ur:"قرآن پاک کی آخری سورت کون سی ہے؟",en:"What is the last surah of the Quran?",o:[["سورۃ الناس","An-Nas"],["سورۃ الفلق","Al-Falaq"],["سورۃ الاخلاص","Al-Ikhlas"],["سورۃ النصر","An-Nasr"]],a:0},
+{c:"Quran",ur:"نماز کی ہر رکعت میں کون سی سورت پڑھی جاتی ہے؟",en:"Which surah is recited in every rak'ah of prayer?",o:[["سورۃ الفاتحہ","Al-Fatiha"],["سورۃ الاخلاص","Al-Ikhlas"],["سورۃ الکوثر","Al-Kawthar"],["سورۃ العصر","Al-Asr"]],a:0},
+
+/* ---- Seerah ---- */
+{c:"Seerah",ur:"نبی کریم ﷺ کی ولادت کس شہر میں ہوئی؟",en:"In which city was Prophet Muhammad ﷺ born?",o:[["مدینہ","Madinah"],["مکہ","Makkah"],["طائف","Taif"],["دمشق","Damascus"]],a:1},
+{c:"Seerah",ur:"پہلی وحی کس غار میں نازل ہوئی؟",en:"In which cave was the first revelation received?",o:[["غارِ ثور","Cave Thawr"],["غارِ حرا","Cave Hira"],["غارِ احد","Cave Uhud"],["غارِ بدر","Cave Badr"]],a:1},
+{c:"Seerah",ur:"ہجرت کر کے نبی کریم ﷺ کس شہر تشریف لے گئے؟",en:"To which city did the Prophet ﷺ migrate (Hijrah)?",o:[["طائف","Taif"],["مدینہ","Madinah"],["یمن","Yemen"],["حبشہ","Abyssinia"]],a:1},
+{c:"Seerah",ur:"نبی کریم ﷺ کی والدہ ماجدہ کا نام کیا تھا؟",en:"What was the name of the Prophet's ﷺ mother?",o:[["حضرت خدیجہؓ","Khadijah"],["حضرت آمنہ","Aminah"],["حضرت حلیمہ","Halimah"],["حضرت فاطمہؓ","Fatimah"]],a:1},
+{c:"Seerah",ur:"نبی کریم ﷺ کی پہلی زوجہ کون تھیں؟",en:"Who was the first wife of the Prophet ﷺ?",o:[["حضرت عائشہؓ","Aisha"],["حضرت خدیجہؓ","Khadijah"],["حضرت حفصہؓ","Hafsa"],["حضرت سودہؓ","Sawdah"]],a:1},
+{c:"Seerah",ur:"نبی کریم ﷺ کا مزارِ مبارک کس شہر میں ہے؟",en:"In which city is the blessed grave of the Prophet ﷺ?",o:[["مکہ","Makkah"],["مدینہ منورہ","Madinah"],["طائف","Taif"],["بغداد","Baghdad"]],a:1},
+{c:"Seerah",ur:"نبوت سے پہلے اہلِ مکہ نبی کریم ﷺ کو کن القابات سے پکارتے تھے؟",en:"Before prophethood, the people of Makkah called the Prophet ﷺ:",o:[["صادق اور امین","As-Sadiq and Al-Ameen"],["فاروق اور غنی","Al-Farooq and Al-Ghani"],["صدیق اور شہید","As-Siddiq and Ash-Shahid"],["کلیم اور خلیل","Kaleem and Khalil"]],a:0},
+{c:"Seerah",ur:"نبی کریم ﷺ کی عمر مبارک پہلی وحی کے وقت کتنی تھی؟",en:"How old was the Prophet ﷺ at the first revelation?",o:[["25 سال","25"],["30 سال","30"],["40 سال","40"],["63 سال","63"]],a:2},
+{c:"Seerah",ur:"نبی کریم ﷺ کی عمر مبارک وصال کے وقت کتنی تھی؟",en:"How old was the Prophet ﷺ at his passing?",o:[["53 سال","53"],["63 سال","63"],["70 سال","70"],["40 سال","40"]],a:1},
+{c:"Seerah",ur:"نبی کریم ﷺ کے والدِ ماجد کا نام کیا تھا؟",en:"What was the name of the Prophet's ﷺ father?",o:[["عبد المطلب","Abdul Muttalib"],["ابو طالب","Abu Talib"],["عبد اللہ","Abdullah"],["عباس","Abbas"]],a:2},
+{c:"Seerah",ur:"ہجرت کے سفر میں نبی کریم ﷺ کے ساتھ کون تھے؟",en:"Who accompanied the Prophet ﷺ on the Hijrah journey?",o:[["حضرت عمرؓ","Umar"],["حضرت ابوبکر صدیقؓ","Abu Bakr"],["حضرت علیؓ","Ali"],["حضرت بلالؓ","Bilal"]],a:1},
+{c:"Seerah",ur:"ہجرت کے دوران نبی کریم ﷺ اور حضرت ابوبکرؓ نے کس غار میں پناہ لی؟",en:"In which cave did the Prophet ﷺ and Abu Bakr hide during Hijrah?",o:[["غارِ حرا","Cave Hira"],["غارِ ثور","Cave Thawr"],["غارِ احد","Cave Uhud"],["غارِ بدر","Cave Badr"]],a:1},
+{c:"Seerah",ur:"نبی کریم ﷺ کو دودھ پلانے والی دایہ کا نام کیا تھا؟",en:"Who was the Prophet's ﷺ wet nurse?",o:[["حضرت حلیمہ سعدیہ","Halimah Sa'diyah"],["حضرت آمنہ","Aminah"],["حضرت ام ایمن","Umm Ayman"],["حضرت سودہ","Sawdah"]],a:0},
+{c:"Seerah",ur:"نبی کریم ﷺ کے کس چچا نے آپ ﷺ کی کفالت اور حفاظت کی؟",en:"Which uncle raised and protected the Prophet ﷺ?",o:[["ابو طالب","Abu Talib"],["ابو لہب","Abu Lahab"],["ابو جہل","Abu Jahl"],["ابو سفیان","Abu Sufyan"]],a:0},
+{c:"Seerah",ur:"نبی کریم ﷺ کی ولادت جس سال ہوئی اسے کس نام سے جانا جاتا ہے؟",en:"The year the Prophet ﷺ was born is known as:",o:[["عام الفیل","Year of the Elephant"],["عام الحزن","Year of Sorrow"],["عام الفتح","Year of Conquest"],["عام الوفود","Year of Delegations"]],a:0},
+{c:"Seerah",ur:"سفرِ معراج میں نبی کریم ﷺ مسجدِ حرام سے کس مسجد تک گئے؟",en:"On the night journey, the Prophet ﷺ travelled from Masjid al-Haram to:",o:[["مسجدِ قبا","Masjid Quba"],["مسجدِ اقصیٰ","Masjid al-Aqsa"],["مسجدِ نبوی","Masjid an-Nabawi"],["مسجدِ قبلتین","Masjid al-Qiblatayn"]],a:1},
+{c:"Seerah",ur:"مدینہ پہنچ کر نبی کریم ﷺ نے سب سے پہلے کون سی مسجد بنائی؟",en:"Which mosque did the Prophet ﷺ build first on reaching Madinah?",o:[["مسجدِ قبا","Masjid Quba"],["مسجدِ نبوی","Masjid an-Nabawi"],["مسجدِ اقصیٰ","Masjid al-Aqsa"],["مسجدِ قبلتین","Masjid al-Qiblatayn"]],a:0},
+
+/* ---- Sahaba & Khulafa ---- */
+{c:"Sahaba",ur:"اسلام کے پہلے خلیفہ کون تھے؟",en:"Who was the first caliph of Islam?",o:[["حضرت عمرؓ","Umar"],["حضرت ابوبکر صدیقؓ","Abu Bakr"],["حضرت عثمانؓ","Uthman"],["حضرت علیؓ","Ali"]],a:1},
+{c:"Sahaba",ur:"فاروقِ اعظم کا لقب کس صحابی کا ہے؟",en:"Which companion is known as 'Al-Farooq'?",o:[["حضرت عمرؓ","Umar"],["حضرت عثمانؓ","Uthman"],["حضرت علیؓ","Ali"],["حضرت بلالؓ","Bilal"]],a:0},
+{c:"Sahaba",ur:"“غنی” کا لقب کس خلیفہ کو ملا؟",en:"Which caliph was known as 'Ghani'?",o:[["حضرت عثمانؓ","Uthman"],["حضرت ابوبکرؓ","Abu Bakr"],["حضرت علیؓ","Ali"],["حضرت عمرؓ","Umar"]],a:0},
+{c:"Sahaba",ur:"اسلام کے چوتھے خلیفہ کون تھے؟",en:"Who was the fourth caliph of Islam?",o:[["حضرت علیؓ","Ali"],["حضرت عثمانؓ","Uthman"],["حضرت عمرؓ","Umar"],["حضرت حسنؓ","Hasan"]],a:0},
+{c:"Sahaba",ur:"اسلام کے تیسرے خلیفہ کون تھے؟",en:"Who was the third caliph of Islam?",o:[["حضرت عثمانؓ","Uthman"],["حضرت علیؓ","Ali"],["حضرت عمرؓ","Umar"],["حضرت ابوبکرؓ","Abu Bakr"]],a:0},
+{c:"Sahaba",ur:"اسلام میں پہلے مؤذن کون تھے؟",en:"Who was the first muezzin of Islam?",o:[["حضرت بلالؓ","Bilal"],["حضرت ابوہریرہؓ","Abu Hurayrah"],["حضرت سلمانؓ","Salman"],["حضرت خالدؓ","Khalid"]],a:0},
+{c:"Sahaba",ur:"“سیف اللہ” (اللہ کی تلوار) کا لقب کس صحابی کا ہے؟",en:"Which companion is called 'Sayfullah' (Sword of Allah)?",o:[["حضرت خالد بن ولیدؓ","Khalid ibn al-Walid"],["حضرت حمزہؓ","Hamza"],["حضرت عمرؓ","Umar"],["حضرت سعدؓ","Sa'd"]],a:0},
+{c:"Sahaba",ur:"حضرت ابوبکرؓ کا مشہور لقب کیا ہے؟",en:"What is the famous title of Abu Bakr?",o:[["صدیق","As-Siddiq"],["فاروق","Al-Farooq"],["ذوالنورین","Dhun-Nurayn"],["سیف اللہ","Sayfullah"]],a:0},
+{c:"Sahaba",ur:"حضرت فاطمہؓ کے شوہر کون تھے؟",en:"Who was the husband of Fatimah (RA)?",o:[["حضرت علیؓ","Ali"],["حضرت عثمانؓ","Uthman"],["حضرت عمرؓ","Umar"],["حضرت ابوبکرؓ","Abu Bakr"]],a:0},
+{c:"Sahaba",ur:"قرآن مجید کے نسخے تیار کر کے مختلف شہروں میں کس خلیفہ کے دور میں بھیجے گئے؟",en:"Under which caliph were standard copies of the Quran sent to different cities?",o:[["حضرت عثمانؓ","Uthman"],["حضرت عمرؓ","Umar"],["حضرت علیؓ","Ali"],["حضرت معاویہؓ","Mu'awiyah"]],a:0},
+
+/* ---- Ibadat ---- */
+{c:"Ibadat",ur:"اسلام کے کتنے بنیادی ارکان ہیں؟",en:"How many pillars of Islam are there?",o:[["3","3"],["4","4"],["5","5"],["6","6"]],a:2},
+{c:"Ibadat",ur:"دن میں کتنی نمازیں فرض ہیں؟",en:"How many daily prayers are obligatory?",o:[["3","3"],["4","4"],["5","5"],["6","6"]],a:2},
+{c:"Ibadat",ur:"فجر کی نماز میں کتنے فرض ہیں؟",en:"How many fard rak'ahs are in Fajr?",o:[["2","2"],["3","3"],["4","4"],["1","1"]],a:0},
+{c:"Ibadat",ur:"ظہر کی نماز میں کتنے فرض ہیں؟",en:"How many fard rak'ahs are in Zuhr?",o:[["2","2"],["3","3"],["4","4"],["5","5"]],a:2},
+{c:"Ibadat",ur:"مغرب کی نماز میں کتنے فرض ہیں؟",en:"How many fard rak'ahs are in Maghrib?",o:[["2","2"],["3","3"],["4","4"],["5","5"]],a:1},
+{c:"Ibadat",ur:"رمضان کے روزے کس مہینے میں رکھے جاتے ہیں؟",en:"In which Islamic month do Muslims fast?",o:[["شعبان","Sha'ban"],["رمضان","Ramadan"],["محرم","Muharram"],["ذوالحجہ","Dhul Hijjah"]],a:1},
+{c:"Ibadat",ur:"حج کس مہینے میں ادا کیا جاتا ہے؟",en:"In which month is Hajj performed?",o:[["رجب","Rajab"],["رمضان","Ramadan"],["ذوالحجہ","Dhul Hijjah"],["صفر","Safar"]],a:2},
+{c:"Ibadat",ur:"عید الفطر کس مہینے کی پہلی تاریخ کو ہوتی ہے؟",en:"Eid al-Fitr falls on the 1st of which month?",o:[["شوال","Shawwal"],["رمضان","Ramadan"],["ذوالحجہ","Dhul Hijjah"],["محرم","Muharram"]],a:0},
+{c:"Ibadat",ur:"خانہ کعبہ کس شہر میں واقع ہے؟",en:"In which city is the Kaaba located?",o:[["مدینہ","Madinah"],["مکہ مکرمہ","Makkah"],["قدس","Jerusalem"],["جدہ","Jeddah"]],a:1},
+{c:"Ibadat",ur:"زکوٰۃ کتنے فیصد ادا کی جاتی ہے (جمع شدہ مال پر)؟",en:"What percentage of eligible savings is paid as Zakat?",o:[["2.5٪","2.5%"],["5٪","5%"],["10٪","10%"],["20٪","20%"]],a:0},
+{c:"Ibadat",ur:"لیلۃ القدر کس مہینے میں آتی ہے؟",en:"In which month is Laylat al-Qadr?",o:[["شعبان","Sha'ban"],["رمضان","Ramadan"],["رجب","Rajab"],["ذوالحجہ","Dhul Hijjah"]],a:1},
+{c:"Ibadat",ur:"9 ذوالحجہ کو حاجی کس میدان میں ٹھہرتے ہیں؟",en:"On 9 Dhul Hijjah pilgrims stay at which plain?",o:[["عرفات","Arafat"],["منیٰ","Mina"],["مزدلفہ","Muzdalifah"],["بدر","Badr"]],a:0},
+{c:"Ibadat",ur:"خانہ کعبہ کے قریب مشہور کنواں کون سا ہے؟",en:"Which famous well is near the Kaaba?",o:[["زمزم","Zamzam"],["بئرِ حاء","Bir Ha"],["بئرِ رومہ","Bir Rumah"],["بئرِ بدر","Bir Badr"]],a:0},
+{c:"Ibadat",ur:"عید الاضحیٰ کس نبی کی قربانی کی یاد میں منائی جاتی ہے؟",en:"Eid al-Adha commemorates the sacrifice of which prophet?",o:[["حضرت ابراہیمؑ","Ibrahim"],["حضرت موسیٰؑ","Musa"],["حضرت نوحؑ","Nuh"],["حضرت یعقوبؑ","Ya'qub"]],a:0},
+{c:"Ibadat",ur:"اسلام میں پہلا قبلہ کون سا تھا؟",en:"What was the first Qibla in Islam?",o:[["بیت المقدس","Bayt al-Maqdis (Jerusalem)"],["کعبہ","Kaaba"],["مسجدِ نبوی","Masjid an-Nabawi"],["کوہِ طور","Mount Sinai"]],a:0},
+
+/* ---- Anbiya & Books ---- */
+{c:"Anbiya",ur:"“خلیل اللہ” کا لقب کس نبی کا ہے؟",en:"Which prophet is known as 'Khalilullah'?",o:[["حضرت ابراہیمؑ","Ibrahim"],["حضرت موسیٰؑ","Musa"],["حضرت عیسیٰؑ","Isa"],["حضرت نوحؑ","Nuh"]],a:0},
+{c:"Anbiya",ur:"“کلیم اللہ” کا لقب کس نبی کا ہے؟",en:"Which prophet is known as 'Kalimullah'?",o:[["حضرت موسیٰؑ","Musa"],["حضرت یوسفؑ","Yusuf"],["حضرت داؤدؑ","Dawud"],["حضرت آدمؑ","Adam"]],a:0},
+{c:"Anbiya",ur:"کس نبی کو مچھلی نے نگل لیا تھا؟",en:"Which prophet was swallowed by a fish?",o:[["حضرت یونسؑ","Yunus"],["حضرت ایوبؑ","Ayyub"],["حضرت ادریسؑ","Idris"],["حضرت لوطؑ","Lut"]],a:0},
+{c:"Anbiya",ur:"سب سے پہلے نبی کون تھے؟",en:"Who was the first prophet?",o:[["حضرت آدمؑ","Adam"],["حضرت نوحؑ","Nuh"],["حضرت ابراہیمؑ","Ibrahim"],["حضرت ادریسؑ","Idris"]],a:0},
+{c:"Anbiya",ur:"آخری نبی کون ہیں؟",en:"Who is the final prophet?",o:[["حضرت عیسیٰؑ","Isa"],["حضرت محمد ﷺ","Muhammad ﷺ"],["حضرت موسیٰؑ","Musa"],["حضرت یحییٰؑ","Yahya"]],a:1},
+{c:"Anbiya",ur:"حضرت موسیٰؑ پر کون سی کتاب نازل ہوئی؟",en:"Which book was revealed to Prophet Musa?",o:[["زبور","Zabur"],["تورات","Torah (Tawrat)"],["انجیل","Injil"],["قرآن","Quran"]],a:1},
+{c:"Anbiya",ur:"حضرت داؤدؑ پر کون سی کتاب نازل ہوئی؟",en:"Which book was revealed to Prophet Dawud?",o:[["زبور","Zabur"],["تورات","Tawrat"],["انجیل","Injil"],["صحف","Suhuf"]],a:0},
+{c:"Anbiya",ur:"حضرت عیسیٰؑ پر کون سی کتاب نازل ہوئی؟",en:"Which book was revealed to Prophet Isa?",o:[["انجیل","Injil"],["زبور","Zabur"],["تورات","Tawrat"],["صحیفے","Scrolls"]],a:0},
+{c:"Anbiya",ur:"حضرت نوحؑ نے اللہ کے حکم سے کیا بنایا؟",en:"What did Prophet Nuh build by Allah's command?",o:[["کشتی","An Ark"],["مسجد","A mosque"],["دیوار","A wall"],["محل","A palace"]],a:0},
+{c:"Anbiya",ur:"کس نبی کو ان کے بھائیوں نے کنویں میں ڈال دیا تھا؟",en:"Which prophet was thrown into a well by his brothers?",o:[["حضرت یوسفؑ","Yusuf"],["حضرت یونسؑ","Yunus"],["حضرت یعقوبؑ","Ya'qub"],["حضرت شعیبؑ","Shu'ayb"]],a:0},
+{c:"Anbiya",ur:"کس نبی کو پرندوں کی بولی سکھائی گئی اور عظیم سلطنت دی گئی؟",en:"Which prophet was taught the speech of birds and given a great kingdom?",o:[["حضرت سلیمانؑ","Sulayman"],["حضرت داؤدؑ","Dawud"],["حضرت ہارونؑ","Harun"],["حضرت زکریاؑ","Zakariyya"]],a:0},
+{c:"Anbiya",ur:"خانہ کعبہ کی بنیادیں کس نبی نے اپنے بیٹے کے ساتھ اٹھائیں؟",en:"Which prophet raised the foundations of the Kaaba with his son?",o:[["حضرت ابراہیمؑ (حضرت اسماعیلؑ کے ساتھ)","Ibrahim (with Isma'il)"],["حضرت نوحؑ (بیٹے کے ساتھ)","Nuh (with his son)"],["حضرت یعقوبؑ (حضرت یوسفؑ کے ساتھ)","Ya'qub (with Yusuf)"],["حضرت داؤدؑ (حضرت سلیمانؑ کے ساتھ)","Dawud (with Sulayman)"]],a:0},
+{c:"Anbiya",ur:"حضرت عیسیٰؑ کی والدہ کا نام کیا تھا؟",en:"What was the name of Prophet Isa's mother?",o:[["حضرت مریمؑ","Maryam"],["حضرت ہاجرہؑ","Hajar"],["حضرت آسیہؑ","Asiyah"],["حضرت سارہؑ","Sarah"]],a:0},
+
+/* ---- General ---- */
+{c:"General",ur:"ہجری سال کا پہلا مہینہ کون سا ہے؟",en:"Which is the first month of the Islamic calendar?",o:[["رمضان","Ramadan"],["محرم","Muharram"],["رجب","Rajab"],["ربیع الاول","Rabi al-Awwal"]],a:1},
+{c:"General",ur:"غزوۂ بدر کس ہجری سال میں ہوا؟",en:"In which Hijri year did the Battle of Badr take place?",o:[["1 ہجری","1 AH"],["2 ہجری","2 AH"],["5 ہجری","5 AH"],["8 ہجری","8 AH"]],a:1},
+{c:"General",ur:"فتحِ مکہ کس ہجری سال میں ہوئی؟",en:"In which Hijri year was Makkah conquered?",o:[["6 ہجری","6 AH"],["8 ہجری","8 AH"],["10 ہجری","10 AH"],["3 ہجری","3 AH"]],a:1},
+{c:"General",ur:"پاکستان کا ریاستی مذہب کیا ہے؟",en:"What is the state religion of Pakistan?",o:[["اسلام","Islam"],["ہندو مت","Hinduism"],["عیسائیت","Christianity"],["کوئی نہیں","None"]],a:0},
+{c:"General",ur:"علامہ اقبالؒ کو کس لقب سے یاد کیا جاتا ہے؟",en:"By what title is Allama Iqbal remembered?",o:[["مفکرِ پاکستان","Thinker of Pakistan"],["بابائے قوم","Father of the Nation"],["قائدِ ملت","Leader of the Nation"],["محسنِ پاکستان","Benefactor of Pakistan"]],a:0},
+{c:"General",ur:"وحی لانے والے فرشتے کا نام کیا ہے؟",en:"Which angel brought revelation to the prophets?",o:[["حضرت جبرائیلؑ","Jibreel"],["حضرت میکائیلؑ","Mikail"],["حضرت اسرافیلؑ","Israfil"],["حضرت عزرائیلؑ","Azrael"]],a:0},
+{c:"General",ur:"صور پھونکنے پر کون سا فرشتہ مقرر ہے؟",en:"Which angel will blow the trumpet (Sur)?",o:[["حضرت اسرافیلؑ","Israfil"],["حضرت جبرائیلؑ","Jibreel"],["حضرت میکائیلؑ","Mikail"],["حضرت رضوان","Ridwan"]],a:0},
+{c:"General",ur:"عاشورہ کس اسلامی تاریخ کو ہوتا ہے؟",en:"Ashura falls on which Islamic date?",o:[["10 محرم","10 Muharram"],["1 رمضان","1 Ramadan"],["12 ربیع الاول","12 Rabi al-Awwal"],["27 رجب","27 Rajab"]],a:0},
+{c:"General",ur:"اللہ تعالیٰ کے اسمائے حسنیٰ کی مشہور تعداد کتنی ہے؟",en:"How many Names of Allah (Asma ul Husna) are commonly counted?",o:[["33","33"],["99","99"],["100","100"],["114","114"]],a:1},
+{c:"General",ur:"پاکستان کب آزاد ہوا؟",en:"When did Pakistan gain independence?",o:[["14 اگست 1947","14 August 1947"],["23 مارچ 1940","23 March 1940"],["25 دسمبر 1876","25 December 1876"],["6 ستمبر 1965","6 September 1965"]],a:0},
+{c:"General",ur:"قائدِ اعظم کا پورا نام کیا تھا؟",en:"What was the full name of Quaid-e-Azam?",o:[["محمد علی جناح","Muhammad Ali Jinnah"],["محمد علی جوہر","Muhammad Ali Jauhar"],["لیاقت علی خان","Liaquat Ali Khan"],["محمد اقبال","Muhammad Iqbal"]],a:0},
+{c:"General",ur:"مسلمانوں کے ہفتہ وار اجتماع کا دن کون سا ہے؟",en:"Which day is the weekly congregational day for Muslims?",o:[["جمعہ","Friday"],["ہفتہ","Saturday"],["اتوار","Sunday"],["جمعرات","Thursday"]],a:0}
+];
+
+/* ====== BADGES ====== */
+const B=[
+ {id:"first",i:"🌱",ur:"پہلا قدم",en:"First Step",chk:()=>S.played>=1},
+ {id:"perfect",i:"🏆",ur:"پرفیکٹ سکور",en:"Perfect Score",chk:()=>!!S.perfect},
+ {id:"s3",i:"🔥",ur:"3 دن لگاتار",en:"3-Day Streak",chk:()=>S.streak>=3},
+ {id:"s7",i:"🌙",ur:"7 دن لگاتار",en:"7-Day Streak",chk:()=>S.streak>=7},
+ {id:"l5",i:"⭐",ur:"لیول 5",en:"Level 5",chk:()=>level()>=5},
+ {id:"c100",i:"📚",ur:"100 درست جوابات",en:"100 Correct",chk:()=>S.correct>=100},
+ {id:"sv10",i:"🛡️",ur:"سروائیول 10",en:"Survivor 10",chk:()=>S.bestSurv>=10},
+ {id:"rich",i:"🪙",ur:"100 سکے",en:"100 Coins",chk:()=>S.coins>=100}
+];
+
+/* ====== STATE ====== */
+const D={best:0,bestSurv:0,streak:0,lastDay:"",xp:0,daily:"",coins:20,played:0,correct:0,answered:0,perfect:0,cat:{},badges:{},hist:[],sound:1,dark:0};
+let S;
+try{S=Object.assign({},D,JSON.parse(localStorage.getItem("iq_s")||"{}"))}catch(e){S=Object.assign({},D)}
+const save=()=>{try{localStorage.setItem("iq_s",JSON.stringify(S))}catch(e){}};
+let lang="ur";try{lang=localStorage.getItem("iq_lang")||"ur"}catch(e){}
+const ds=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const today=()=>ds(new Date());
+const yest=()=>{const d=new Date();d.setDate(d.getDate()-1);return ds(d)};
+if(S.lastDay&&S.lastDay!==today()&&S.lastDay!==yest())S.streak=0;
+document.body.classList.toggle("dark",!!S.dark);
+
+const $=id=>document.getElementById(id);
+const T={
+ ur:{sub:"روزانہ سیکھیں، دوستوں کو چیلنج کریں",daily:"📅 آج کا چیلنج",done:"آج کا چیلنج مکمل ✅",quiz:"▶ کوئز شروع کریں",surv:"🛡️ سروائیول (3 جانیں)",stat:"📊 اعداد و شمار اور بیجز",mixed:"ملا جلا",pick:"موضوع منتخب کریں",back:"⬅ واپس",next:"اگلا سوال ➜",result:"نتیجہ دیکھیں ➜",again:"دوبارہ کھیلیں",share:"📲 واٹس ایپ پر شیئر کریں",review:"❌ غلطیاں دیکھیں",rev:"آپ کی غلطیاں",right:"✅ شاباش! درست جواب",wrong:"❌ غلط۔ درست جواب سبز ہے",time:"⏰ وقت ختم!",lvl:"لیول",streak:"روزانہ سلسلہ",nocoin:"سکے کافی نہیں ہیں 🪙",ad:"اشتہار کی جگہ (AdMob)",played:"کھیلے گئے کوئز",acc:"درستگی",best:"بہترین سکور",bestSurv:"بہترین سروائیول",coins:"سکے",topics:"موضوع کے لحاظ سے درستگی",badges:"بیجز",recent:"حالیہ نتائج",bonus:"بونس",res:"نتیجہ",menu:"🏠 مینو"},
+ en:{sub:"Learn daily, challenge your friends",daily:"📅 Daily Challenge",done:"Daily challenge done ✅",quiz:"▶ Start Quiz",surv:"🛡️ Survival (3 lives)",stat:"📊 Stats & Badges",mixed:"Mixed",pick:"Choose a topic",back:"⬅ Back",next:"Next ➜",result:"See Result ➜",again:"Play Again",share:"📲 Share on WhatsApp",review:"❌ Review Mistakes",rev:"Your Mistakes",right:"✅ Correct!",wrong:"❌ Wrong. Correct answer in green",time:"⏰ Time's up!",lvl:"Level",streak:"Daily streak",nocoin:"Not enough coins 🪙",ad:"Ad space (AdMob)",played:"Quizzes played",acc:"Accuracy",best:"Best score",bestSurv:"Best survival",coins:"Coins",topics:"Accuracy by topic",badges:"Badges",recent:"Recent results",bonus:"Bonus",res:"Result",menu:"🏠 Menu"}
+};
+const t=k=>T[lang][k];
+const rtl=()=>lang==="ur"?"rtl":"";
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+function seeded(seed){let h=0;for(const ch of seed)h=(h*31+ch.charCodeAt(0))>>>0;return()=>{h=(h*1664525+1013904223)>>>0;return h/4294967296}}
+const level=()=>Math.floor(S.xp/100)+1;
+const qtext=q=>lang==="ur"?q.ur:q.en;
+
+/* ====== SOUND / TOAST ====== */
+let AC=null;
+function beep(f,d,type,delay){
+ if(!S.sound)return;
+ try{
+  AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+  const o=AC.createOscillator(),g=AC.createGain(),t0=AC.currentTime+(delay||0);
+  o.type=type||"sine";o.frequency.value=f;
+  g.gain.setValueAtTime(.15,t0);g.gain.exponentialRampToValueAtTime(.001,t0+d);
+  o.connect(g);g.connect(AC.destination);o.start(t0);o.stop(t0+d);
+ }catch(e){}
+}
+const sndOk=()=>{beep(660,.15);beep(880,.2,"sine",.12)};
+const sndBad=()=>beep(180,.35,"sawtooth");
+function toast(m){const el=$("toast");el.textContent=m;el.classList.add("show");clearTimeout(toast._t);toast._t=setTimeout(()=>el.classList.remove("show"),2600)}
+
+let run=null,timer=null;
+function refresh(){
+ $("streak").textContent=S.streak;$("coins").textContent=S.coins;$("best").textContent=S.best;$("lvl").textContent=level();
+ $("sub").textContent=t("sub");document.documentElement.lang=lang;if(typeof renderNav==="function")renderNav();
+}
+
+/* ====== HOME / MENUS ====== */
+function home(){
+ curTab="quiz";clearInterval(timer);refresh();
+ const dd=S.daily===today();
+ $("main").innerHTML=`
+ <div class="top">
+  <div class="lang"><button class="${lang==="ur"?"on":""}" onclick="setLang('ur')">اردو</button><button class="${lang==="en"?"on":""}" onclick="setLang('en')">English</button></div>
+  <div class="tools"><button onclick="toggle('sound')">${S.sound?"🔊":"🔇"}</button><button onclick="toggle('dark')">${S.dark?"☀️":"🌙"}</button></div>
+ </div>
+ <div class="card center ${rtl()}">
+  <div class="big">🕌</div>
+  <button class="btn gold" ${dd?"disabled style='opacity:.6'":""} onclick="start('daily')">${dd?t("done"):t("daily")}</button>
+  <button class="btn" onclick="topics()">${t("quiz")}</button>
+  <button class="btn" onclick="start('survival')">${t("surv")}</button>
+  <button class="btn ghost" onclick="stats()">${t("stat")}</button>
+  <div class="exp" id="mini"></div>
+  <div class="exp">${t("streak")}: ${S.streak} 🔥 · ${t("lvl")} ${level()}</div>
+  <div class="bar" style="margin-top:8px"><i style="width:${S.xp%100}%"></i></div>
+ </div>
+ <div class="ad">${t("ad")}</div>`;
+ if(typeof updateNextUI==="function")updateNextUI();
+}
+function setLang(l){lang=l;try{localStorage.setItem("iq_lang",l)}catch(e){}if(typeof syncNative==="function")syncNative();home()}
+function toggle(k){S[k]=S[k]?0:1;save();if(k==="dark")document.body.classList.toggle("dark",!!S.dark);home()}
+
+function topics(){
+ const items=Object.keys(CL).map(k=>`<button class="btn" onclick="start('quiz','${k}')">${CL[k].i} ${CL[k][lang]} <small>(${Q.filter(q=>q.c===k).length})</small></button>`).join("");
+ $("main").innerHTML=`<div class="card ${rtl()}"><h3 class="center">${t("pick")}</h3>
+  <button class="btn gold" onclick="start('quiz','all')">🎲 ${t("mixed")}</button>${items}
+  <button class="btn ghost" onclick="home()">${t("back")}</button></div>`;
+}
+
+/* ====== QUIZ FLOW ====== */
+function start(mode,cat){
+ const pool=(cat&&cat!=="all")?Q.filter(q=>q.c===cat):Q;
+ let qs;
+ if(mode==="daily"){const r=seeded(today());qs=Q.map(q=>[r(),q]).sort((a,b)=>a[0]-b[0]).slice(0,10).map(x=>x[1])}
+ else if(mode==="survival")qs=shuffle(Q);
+ else qs=shuffle(pool).slice(0,10);
+ run={mode,cat:cat||"all",qs,i:0,score:0,lives:3,wrong:[],locked:false,used:{},res:null};
+ show();
+}
+function show(){
+ clearInterval(timer);
+ const q=run.qs[run.i];
+ run.left=15;run.locked=false;run.used={};
+ run.order=shuffle(q.o.map((o,idx)=>({o,idx})));
+ const surv=run.mode==="survival";
+ const head=surv?`<span>${"❤️".repeat(run.lives)}${"🖤".repeat(3-run.lives)}</span>`:`<span>${run.i+1} / ${run.qs.length}</span>`;
+ const prog=surv?0:run.i/run.qs.length*100;
+ $("main").innerHTML=`
+ <div class="row">${head}<span class="timer">⏱ <span id="tm">15</span></span><span>⭐ ${run.score}</span></div>
+ <div class="bar"><i style="width:${prog}%"></i></div>
+ <div class="card ${rtl()}">
+  <div class="exp">${CL[q.c].i} ${CL[q.c][lang]}</div>
+  <div class="q">${qtext(q)}</div>
+  ${run.order.map((x,k)=>`<button class="opt" id="o${k}" onclick="pick(${k})">${lang==="ur"?x.o[0]:x.o[1]}</button>`).join("")}
+  <div id="fb" class="exp"></div>
+  <button id="nx" class="btn hide" onclick="nextQ()">${t("next")}</button>
+ </div>
+ <div class="life">
+  <button id="l1" onclick="use5050()">50/50 <small>5🪙</small></button>
+  <button id="l2" onclick="addTime()">⏱ +10s <small>3🪙</small></button>
+  <button id="l3" onclick="skipQ()">⏭ <small>5🪙</small></button>
+ </div>`;
+ timer=setInterval(tick,1000);
+}
+function tick(){run.left--;const e=$("tm");if(e)e.textContent=run.left;if(run.left<=0){clearInterval(timer);pick(-1)}}
+function pay(n){if(S.coins<n){toast(t("nocoin"));return false}S.coins-=n;save();refresh();return true}
+function use5050(){
+ if(run.locked||run.used.a)return;if(!pay(5))return;
+ run.used.a=1;const q=run.qs[run.i];
+ const wr=run.order.map((x,k)=>k).filter(k=>run.order[k].idx!==q.a);
+ shuffle(wr).slice(0,2).forEach(k=>{const b=$("o"+k);b.disabled=true;b.style.opacity=.25});
+ $("l1").disabled=true;
+}
+function addTime(){
+ if(run.locked||run.used.t)return;if(!pay(3))return;
+ run.used.t=1;run.left+=10;$("tm").textContent=run.left;$("l2").disabled=true;
+}
+function skipQ(){
+ if(run.locked)return;if(!pay(5))return;
+ run.locked=true;clearInterval(timer);nextQ();
+}
+function pick(k){
+ if(run.locked)return;run.locked=true;clearInterval(timer);
+ const q=run.qs[run.i];
+ run.order.forEach((x,i)=>{const b=$("o"+i);b.disabled=true;if(x.idx===q.a)b.classList.add("right");else if(i===k)b.classList.add("wrong")});
+ ["l1","l2","l3"].forEach(id=>{const b=$(id);if(b)b.disabled=true});
+ const ok=k>=0&&run.order[k].idx===q.a;
+ const c=S.cat[q.c]||[0,0];c[1]++;S.answered++;
+ if(ok){c[0]++;S.correct++;S.coins++;run.score++;sndOk();$("fb").textContent=t("right")}
+ else{
+  run.wrong.push(q);sndBad();
+  try{navigator.vibrate&&navigator.vibrate(150)}catch(e){}
+  if(run.mode==="survival")run.lives--;
+  $("fb").textContent=k<0?t("time"):t("wrong");
+ }
+ S.cat[q.c]=c;save();refresh();
+ const last=run.mode==="survival"?(run.lives<=0||run.i>=run.qs.length-1):run.i>=run.qs.length-1;
+ $("nx").textContent=last?t("result"):t("next");
+ $("nx").classList.remove("hide");
+}
+function nextQ(){
+ run.i++;
+ const over=run.mode==="survival"?(run.lives<=0||run.i>=run.qs.length):run.i>=run.qs.length;
+ if(over)finish();else show();
+}
+
+function finish(){
+ clearInterval(timer);
+ const sc=run.score,m=run.mode,n=run.qs.length;
+ let bonus=0;
+ S.played++;S.xp+=sc*10;
+ if(m==="survival"){if(sc>S.bestSurv)S.bestSurv=sc}
+ else{
+  if(sc>S.best)S.best=sc;
+  if(n>=9&&sc===n){S.perfect=1;S.coins+=5;bonus+=5}
+ }
+ if(m==="daily"){
+  if(S.lastDay!==today()){S.streak=(S.lastDay===yest())?S.streak+1:1;S.lastDay=today()}
+  S.daily=today();S.coins+=10;bonus+=10;
+ }
+ S.hist.unshift({s:sc,n:m==="survival"?0:n,m,d:today()});S.hist=S.hist.slice(0,5);
+ const nb=[];
+ B.forEach(b=>{if(!S.badges[b.id]&&b.chk()){S.badges[b.id]=1;nb.push(b)}});
+ save();refresh();
+ run.res={sc,bonus};
+ renderResult();
+ if(nb.length)toast("🏅 "+nb.map(b=>b[lang]).join(" · "));
+}
+function renderResult(){
+ const {sc,bonus}=run.res,m=run.mode,n=run.qs.length;
+ const total=m==="survival"?"":` / ${n}`;
+ const emoji=m==="survival"?(sc>=10?"🏆":"🛡️"):(sc===n?"🏆":sc>=n*.6?"🌟":"📖");
+ const modeName=m==="daily"?t("daily").replace("📅 ",""):m==="survival"?t("surv").replace("🛡️ ",""):(run.cat==="all"?t("mixed"):CL[run.cat][lang]);
+ window._msg=lang==="ur"?`میں نے اسلامی کوئز (${modeName}) میں ${sc}${total} سکور کیا! کیا آپ مجھے ہرا سکتے ہیں؟ 🕌`:`I scored ${sc}${total} in Islamic Quiz (${modeName})! Can you beat me? 🕌`;
+ $("main").innerHTML=`
+ <div class="card center ${rtl()}">
+  <div class="big">${emoji}</div>
+  <h2>${t("res")}: ${sc}${total}</h2>
+  ${bonus?`<div class="exp">${t("bonus")}: +${bonus} 🪙</div>`:""}
+  <button class="btn gold" onclick="shareWA()">${t("share")}</button>
+  ${run.wrong.length?`<button class="btn ghost" onclick="review()">${t("review")} (${run.wrong.length})</button>`:""}
+  <button class="btn" onclick="replay()">${t("again")}</button>
+  <button class="btn ghost" onclick="home()">${t("menu")}</button>
+ </div>
+ <div class="ad">${t("ad")}</div>`;
+}
+function replay(){if(run.mode==="daily")start("quiz","all");else start(run.mode,run.cat)}
+function review(){
+ $("main").innerHTML=`<div class="card ${rtl()}"><h3 class="center">${t("rev")}</h3>`+
+ run.wrong.map(q=>`<div class="rv"><div class="q" style="font-size:17px;margin:0 0 4px">${qtext(q)}</div><div class="rvok">✅ ${lang==="ur"?q.o[q.a][0]:q.o[q.a][1]}</div></div>`).join("")+
+ `<button class="btn ghost" onclick="renderResult()">${t("back")}</button></div>`;
+}
+
+/* ====== STATS ====== */
+function stats(){
+ const acc=S.answered?Math.round(S.correct/S.answered*100):0;
+ const rows=Object.keys(CL).map(k=>{
+  const c=S.cat[k]||[0,0],p=c[1]?Math.round(c[0]/c[1]*100):0;
+  return `<div class="srow"><span>${CL[k].i} ${CL[k][lang]}</span><span>${p}%</span></div><div class="bar"><i style="width:${p}%"></i></div>`;
+ }).join("");
+ const bd=B.map(b=>`<div class="badge ${S.badges[b.id]?"":"lock"}"><div>${b.i}</div><small>${b[lang]}</small></div>`).join("");
+ const hs=S.hist.map(h=>`<div class="srow"><span>${h.d} · ${h.m==="survival"?t("surv").replace("🛡️ ",""):h.m==="daily"?t("daily").replace("📅 ",""):t("quiz").replace("▶ ","")}</span><b>${h.s}${h.n?" / "+h.n:""}</b></div>`).join("")||`<div class="exp">—</div>`;
+ $("main").innerHTML=`
+ <div class="card ${rtl()}">
+  <div class="srow"><span>${t("played")}</span><b>${S.played}</b></div>
+  <div class="srow"><span>${t("acc")}</span><b>${acc}%</b></div>
+  <div class="srow"><span>${t("best")}</span><b>${S.best}</b></div>
+  <div class="srow"><span>${t("bestSurv")}</span><b>${S.bestSurv}</b></div>
+  <div class="srow"><span>${t("coins")}</span><b>${S.coins} 🪙</b></div>
+ </div>
+ <div class="card ${rtl()}"><h3>${t("topics")}</h3>${rows}</div>
+ <div class="card ${rtl()}"><h3>${t("badges")}</h3><div class="badges">${bd}</div></div>
+ <div class="card ${rtl()}"><h3>${t("recent")}</h3>${hs}</div>
+ <button class="btn ghost" onclick="home()">${t("back")}</button>`;
+}
+
+function shareWA(){
+ if(typeof NATIVE!=="undefined"&&NATIVE){AndroidBridge.share(window._msg);return}
+ const url=location.href.split("#")[0];
+ window.open("https://wa.me/?text="+encodeURIComponent(window._msg+" "+url),"_blank");
+}
+</script>
+<script>
+/* ============ ISLAMIC FEATURES: prayer times, calendar, azan, qibla ============ */
+const NT={
+ ur:{tQuiz:"کوئز",tPrayer:"نماز",tCal:"کیلنڈر",tSet:"ترتیبات",
+  next:"اگلی نماز",fajr:"فجر",sunrise:"طلوعِ آفتاب",dhuhr:"ظہر",jumua:"جمعہ",asr:"عصر",maghrib:"مغرب",isha:"عشاء",
+  sehri:"سحری کا آخری وقت",iftar:"افطار",qibla:"قبلہ کی سمت",qFrom:"شمال سے گھڑی کی سمت میں",qDist:"کعبہ تک فاصلہ",km:"کلومیٹر",
+  N:"شمال",NE:"شمال مشرق",E:"مشرق",SE:"جنوب مشرق",S:"جنوب",SW:"جنوب مغرب",W:"مغرب",NW:"شمال مغرب",
+  today:"آج",tomorrow:"کل",daysLeft:"دن باقی",upcoming:"آنے والے اسلامی ایام",
+  calNote:"ہجری تاریخ چاند نظر آنے پر ایک دن آگے پیچھے ہو سکتی ہے۔ مبارک راتوں کی تاریخ شام سے شروع ہوتی ہے۔",
+  noEvent:"اس دن کوئی خاص اسلامی دن نہیں",
+  city:"شہر",pak:"پاکستان",intl:"دیگر ممالک",myLoc:"میری لوکیشن",useGps:"📍 میری لوکیشن استعمال کریں",locating:"لوکیشن ڈھونڈ رہے ہیں…",gpsFail:"لوکیشن نہیں ملی، شہر چن لیں",noGps:"یہ ڈیوائس لوکیشن سپورٹ نہیں کرتی",
+  method:"حساب کا طریقہ",asrM:"عصر کا وقت",asr1:"معیاری (شافعی/مالکی/حنبلی)",asr2:"حنفی (سایہ دوگنا)",
+  hadj:"ہجری تاریخ میں فرق (دن)",hadjNote:"پاکستان میں عموماً سعودی عرب سے ایک دن بعد چاند نظر آتا ہے، اس لیے ڈیفالٹ -1 ہے۔ ضرورت ہو تو خود بدل لیں۔",
+  azan:"اذان",azOnOff:"کن نمازوں پر اذان بجے",azSound:"اذان کی آواز",sndCustom:"میری اپنی اذان کی فائل",sndTone:"سادہ گھنٹی",sndSilent:"صرف نوٹیفکیشن (آواز نہیں)",
+  upload:"اذان کی آڈیو فائل چنیں (mp3/m4a)",noFile:"ابھی کوئی فائل نہیں",azNative:"اذان وقت پر خود بخود بجے گی، چاہے ایپ بند ہو۔ بہترین کام کے لیے نیچے کی اجازتیں دیں۔ فون کی الارم والیوم کھلی رکھیں۔",pNotif:"نوٹیفکیشن کی اجازت",pExact:"درست وقت پر الارم کی اجازت",pBatt:"بیٹری پابندی ہٹائیں (ضروری)",give:"اجازت دیں",okMark:"فعال ✅",remove:"فائل ہٹائیں",test:"🔊 اذان ٹیسٹ کریں",stop:"⏹ بند کریں",playNow:"▶ چلائیں",
+  notif:"نوٹیفکیشن",notifAsk:"نوٹیفکیشن کی اجازت دیں",notifOn:"نوٹیفکیشن فعال ✅",notifOff:"نوٹیفکیشن بند ہیں",
+  azTime:"اذان کا وقت",azKeep:"اس ویب ورژن میں اذان تب بجتی ہے جب ایپ کھلی ہو اور آپ نے کم از کم ایک بار اسکرین ٹچ کی ہو۔ بند ایپ میں اذان کے لیے Android ایپ کا اگلا مرحلہ چاہیے۔",
+  tooBig:"فائل 10MB سے بڑی ہے",badFile:"یہ آڈیو فائل نہیں ہے",saved:"محفوظ ہو گیا ✅",
+  hiLat:"اس شہر میں اس موسم میں اس نماز کا وقت حساب سے نہیں نکلتا",lang:"زبان",
+  methodNote:"اوقات فلکیاتی حساب سے نکلتے ہیں، اپنی مسجد کے وقت سے 1-2 منٹ کا فرق ہو سکتا ہے۔ احتیاطاً مقامی مسجد کا ٹائم بھی دیکھیں۔",
+  wd:["اتوار","پیر","منگل","بدھ","جمعرات","جمعہ","ہفتہ"],
+  gm:["جنوری","فروری","مارچ","اپریل","مئی","جون","جولائی","اگست","ستمبر","اکتوبر","نومبر","دسمبر"],
+  hm:["محرم","صفر","ربیع الاول","ربیع الثانی","جمادی الاول","جمادی الثانی","رجب","شعبان","رمضان","شوال","ذوالقعدہ","ذوالحجہ"]},
+ en:{tQuiz:"Quiz",tPrayer:"Prayer",tCal:"Calendar",tSet:"Settings",
+  next:"Next prayer",fajr:"Fajr",sunrise:"Sunrise",dhuhr:"Dhuhr",jumua:"Jumu'ah",asr:"Asr",maghrib:"Maghrib",isha:"Isha",
+  sehri:"Sehri ends",iftar:"Iftar",qibla:"Qibla direction",qFrom:"clockwise from North",qDist:"Distance to Kaaba",km:"km",
+  N:"North",NE:"North-east",E:"East",SE:"South-east",S:"South",SW:"South-west",W:"West",NW:"North-west",
+  today:"Today",tomorrow:"Tomorrow",daysLeft:"days left",upcoming:"Upcoming Islamic days",
+  calNote:"The Hijri date can differ by a day depending on moon sighting. Blessed nights begin at sunset of the evening before.",
+  noEvent:"No special Islamic day",
+  city:"City",pak:"Pakistan",intl:"Other countries",myLoc:"My location",useGps:"📍 Use my location",locating:"Finding your location…",gpsFail:"Could not get location, pick a city",noGps:"This device has no location support",
+  method:"Calculation method",asrM:"Asr timing",asr1:"Standard (Shafi'i/Maliki/Hanbali)",asr2:"Hanafi (double shadow)",
+  hadj:"Hijri date adjustment (days)",hadjNote:"In Pakistan the moon is usually sighted a day after Saudi Arabia, so the default is -1. Change it if needed.",
+  azan:"Azan",azOnOff:"Play azan for",azSound:"Azan sound",sndCustom:"My own azan file",sndTone:"Simple chime",sndSilent:"Notification only (no sound)",
+  upload:"Choose an azan audio file (mp3/m4a)",noFile:"No file yet",azNative:"Azan plays automatically on time even when the app is closed. For best results grant the permissions below, and keep the phone's alarm volume up.",pNotif:"Notification permission",pExact:"Exact alarm permission",pBatt:"Remove battery restriction (important)",give:"Allow",okMark:"On ✅",remove:"Remove file",test:"🔊 Test azan",stop:"⏹ Stop",playNow:"▶ Play",
+  notif:"Notifications",notifAsk:"Allow notifications",notifOn:"Notifications enabled ✅",notifOff:"Notifications are off",
+  azTime:"Time for azan",azKeep:"In this web version the azan only plays while the app is open and you have touched the screen at least once. Playing with the app closed needs the Android app step.",
+  tooBig:"File is larger than 10MB",badFile:"That is not an audio file",saved:"Saved ✅",
+  hiLat:"This prayer time cannot be calculated for this city in this season",lang:"Language",
+  methodNote:"Times come from astronomical calculation and can differ by 1-2 minutes from your local mosque. Please also check your mosque's timetable.",
+  wd:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+  gm:["January","February","March","April","May","June","July","August","September","October","November","December"],
+  hm:["Muharram","Safar","Rabi al-Awwal","Rabi al-Thani","Jumada al-Awwal","Jumada al-Thani","Rajab","Sha'ban","Ramadan","Shawwal","Dhul Qa'dah","Dhul Hijjah"]}
+};
+const nt=k=>NT[lang][k];
+const NATIVE=typeof AndroidBridge!=="undefined";
+let _syncT=null;
+function syncNative(){
+ if(!NATIVE)return;
+ clearTimeout(_syncT);
+ _syncT=setTimeout(()=>{
+  try{
+   const list=[],now=Date.now();
+   for(let off=0;off<30;off++){const dt=dayTimes(off);for(const p of PR){if(!S.azan[p])continue;const v=dt.t[p];if(v>now)list.push({t:v,n:pname(p,dt.dow===5)})}}
+   AndroidBridge.schedule(JSON.stringify(list),S.azSound||"tone");
+  }catch(e){}
+ },400);
+}
+function onNativeAzanPicked(name){S.azFile=name;S.azSound="custom";save();syncNative();if(curTab==="set")settingsPage()}
+function nativeRows(){
+ let nOk=true,eOk=true;try{nOk=AndroidBridge.notifOk();eOk=AndroidBridge.canExact()}catch(e){}
+ const row=(label,ok,fn)=>`<div class="setrow"><span>${label}</span><span>${ok?nt("okMark"):`<button class="btn ghost" style="margin:0;padding:8px 14px;width:auto" onclick="${fn}">${nt("give")}</button>`}</span></div>`;
+ return row(nt("pNotif"),nOk,"AndroidBridge.askNotif()")+row(nt("pExact"),eOk,"AndroidBridge.openExactSettings()")+row(nt("pBatt"),false,"AndroidBridge.openBatterySettings()");
+}
+
+/* ---------- data ---------- */
+const CITIES=[
+ {id:"karachi",ur:"کراچی",en:"Karachi",lat:24.8607,lng:67.0011,tz:"Asia/Karachi",pk:1},
+ {id:"lahore",ur:"لاہور",en:"Lahore",lat:31.5204,lng:74.3587,tz:"Asia/Karachi",pk:1},
+ {id:"islamabad",ur:"اسلام آباد",en:"Islamabad",lat:33.6844,lng:73.0479,tz:"Asia/Karachi",pk:1},
+ {id:"rawalpindi",ur:"راولپنڈی",en:"Rawalpindi",lat:33.5651,lng:73.0169,tz:"Asia/Karachi",pk:1},
+ {id:"peshawar",ur:"پشاور",en:"Peshawar",lat:34.0151,lng:71.5249,tz:"Asia/Karachi",pk:1},
+ {id:"quetta",ur:"کوئٹہ",en:"Quetta",lat:30.1798,lng:66.9750,tz:"Asia/Karachi",pk:1},
+ {id:"faisalabad",ur:"فیصل آباد",en:"Faisalabad",lat:31.4504,lng:73.1350,tz:"Asia/Karachi",pk:1},
+ {id:"multan",ur:"ملتان",en:"Multan",lat:30.1575,lng:71.5249,tz:"Asia/Karachi",pk:1},
+ {id:"hyderabad",ur:"حیدرآباد",en:"Hyderabad",lat:25.3960,lng:68.3578,tz:"Asia/Karachi",pk:1},
+ {id:"sialkot",ur:"سیالکوٹ",en:"Sialkot",lat:32.4945,lng:74.5229,tz:"Asia/Karachi",pk:1},
+ {id:"gujranwala",ur:"گوجرانوالہ",en:"Gujranwala",lat:32.1877,lng:74.1945,tz:"Asia/Karachi",pk:1},
+ {id:"bahawalpur",ur:"بہاولپور",en:"Bahawalpur",lat:29.3956,lng:71.6836,tz:"Asia/Karachi",pk:1},
+ {id:"sukkur",ur:"سکھر",en:"Sukkur",lat:27.7052,lng:68.8574,tz:"Asia/Karachi",pk:1},
+ {id:"abbottabad",ur:"ایبٹ آباد",en:"Abbottabad",lat:34.1688,lng:73.2215,tz:"Asia/Karachi",pk:1},
+ {id:"muzaffarabad",ur:"مظفر آباد",en:"Muzaffarabad",lat:34.3700,lng:73.4711,tz:"Asia/Karachi",pk:1},
+ {id:"gilgit",ur:"گلگت",en:"Gilgit",lat:35.9208,lng:74.3080,tz:"Asia/Karachi",pk:1},
+ {id:"makkah",ur:"مکہ مکرمہ",en:"Makkah",lat:21.3891,lng:39.8579,tz:"Asia/Riyadh"},
+ {id:"madinah",ur:"مدینہ منورہ",en:"Madinah",lat:24.5247,lng:39.5692,tz:"Asia/Riyadh"},
+ {id:"dubai",ur:"دبئی",en:"Dubai",lat:25.2048,lng:55.2708,tz:"Asia/Dubai"},
+ {id:"london",ur:"لندن",en:"London",lat:51.5072,lng:-0.1276,tz:"Europe/London"},
+ {id:"newyork",ur:"نیویارک",en:"New York",lat:40.7128,lng:-74.0060,tz:"America/New_York"},
+ {id:"toronto",ur:"ٹورنٹو",en:"Toronto",lat:43.6532,lng:-79.3832,tz:"America/Toronto"}
+];
+const METH={
+ karachi:{ur:"یونیورسٹی آف اسلامک سائنسز، کراچی (پاکستان)",en:"Univ. of Islamic Sciences, Karachi (Pakistan)",f:18,i:18},
+ mwl:{ur:"مسلم ورلڈ لیگ",en:"Muslim World League",f:18,i:17},
+ isna:{ur:"ISNA (شمالی امریکہ)",en:"ISNA (North America)",f:15,i:15},
+ egypt:{ur:"مصری اتھارٹی",en:"Egyptian Authority",f:19.5,i:17.5},
+ makkah:{ur:"اُمّ القریٰ، مکہ",en:"Umm al-Qura, Makkah",f:18.5,i:90}
+};
+/* key = hijriMonth-hijriDay of the DAY on which the event is observed (blessed nights: the evening before) */
+const EV={
+ "1-1":{ur:"اسلامی نیا سال",en:"Islamic New Year"},
+ "1-10":{ur:"یومِ عاشورہ",en:"Day of Ashura"},
+ "3-12":{ur:"عید میلاد النبی ﷺ",en:"Eid Milad-un-Nabi ﷺ"},
+ "7-26":{ur:"شبِ معراج (27 رجب کی رات، شام سے)",en:"Shab-e-Meraj (night of 27 Rajab, from evening)"},
+ "8-14":{ur:"شبِ برات (15 شعبان کی رات، شام سے)",en:"Shab-e-Barat (night of 15 Sha'ban, from evening)"},
+ "9-1":{ur:"رمضان المبارک کا پہلا دن",en:"First day of Ramadan"},
+ "9-26":{ur:"شبِ قدر (27 رمضان کی رات، شام سے)",en:"Shab-e-Qadr (night of 27 Ramadan, from evening)"},
+ "10-1":{ur:"عید الفطر",en:"Eid ul-Fitr"},
+ "12-9":{ur:"یومِ عرفہ",en:"Day of Arafah"},
+ "12-10":{ur:"عید الاضحیٰ",en:"Eid ul-Adha"}
+};
+const PR=["fajr","dhuhr","asr","maghrib","isha"];
+
+/* ---------- astronomy ---------- */
+const dtr=Math.PI/180,rtd=180/Math.PI;
+const dsin=x=>Math.sin(x*dtr),dcos=x=>Math.cos(x*dtr),dtan=x=>Math.tan(x*dtr);
+const darcsin=x=>Math.asin(x)*rtd,darccos=x=>Math.acos(x)*rtd,darccot=x=>Math.atan(1/x)*rtd,darctan2=(y,x)=>Math.atan2(y,x)*rtd;
+const fixm=(a,b)=>{a=a-b*Math.floor(a/b);return a<0?a+b:a};
+function julianDay(y,m,d){if(m<=2){y-=1;m+=12}const A=Math.floor(y/100),Bq=2-A+Math.floor(A/4);return Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d+Bq-1524.5}
+function sunPos(jd){const Dd=jd-2451545.0,g=fixm(357.529+0.98560028*Dd,360),q=fixm(280.459+0.98564736*Dd,360),L=fixm(q+1.915*dsin(g)+0.020*dsin(2*g),360),e=23.439-0.00000036*Dd,RA=darctan2(dcos(e)*dsin(L),dcos(L))/15;return{decl:darcsin(dsin(e)*dsin(L)),eqt:q/15-fixm(RA,24)}}
+function tzParts(date,tz){const o={};new Intl.DateTimeFormat("en-CA",{timeZone:tz,hourCycle:"h23",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit"}).formatToParts(date).forEach(p=>{o[p.type]=p.value});return o}
+function localYMD(date,tz){const p=tzParts(date,tz);return{y:+p.year,m:+p.month,d:+p.day}}
+function fmtT(ms,tz){if(!(ms>0))return"—";return new Intl.DateTimeFormat("en-US",{hour:"numeric",minute:"2-digit",hour12:true,timeZone:tz}).format(new Date(ms))}
+
+/* returns UTC milliseconds (rounded to the minute) for each prayer on the civil date y-m-d of the location */
+function calcTimes(y,m,d,loc){
+ const M=METH[S.method]||METH.karachi,lat=loc.lat,lng=loc.lng;
+ const jd=julianDay(y,m,d)-lng/360;
+ const mid=tt=>fixm(12-sunPos(jd+tt).eqt,24);
+ const ang=(a,tt,ccw)=>{const dc=sunPos(jd+tt).decl;const v=darccos((-dsin(a)-dsin(dc)*dsin(lat))/(dcos(dc)*dcos(lat)))/15;return mid(tt)+(ccw?-v:v)};
+ const asrT=(f,tt)=>{const dc=sunPos(jd+tt).decl;return ang(-darccot(f+dtan(Math.abs(lat-dc))),tt,false)};
+ const h={fajr:ang(M.f,5/24,true),sunrise:ang(0.833,6/24,true),dhuhr:mid(12/24),asr:asrT(S.asr==1?1:2,13/24),maghrib:ang(0.833,18/24,false)};
+ h.isha=M.i>=30?h.maghrib+M.i/60:ang(M.i,18/24,false);
+ const out={};
+ for(const k in h)out[k]=Math.round((Date.UTC(y,m-1,d)+(h[k]-lng/15)*3600000)/60000)*60000;
+ return out;
+}
+
+/* ---------- location / state ---------- */
+function initIslamic(){
+ S.azan=Object.assign({fajr:1,dhuhr:1,asr:1,maghrib:1,isha:1},S.azan||{});
+ if(!S.city)S.city="karachi";
+ if(!S.method)S.method="karachi";
+ if(S.asr==null)S.asr=2;
+ if(!S.azSound)S.azSound="tone";
+ if(NATIVE){try{S.azFile=AndroidBridge.hasCustom()?AndroidBridge.customName():""}catch(e){}if(!S.azFile&&S.azSound==="custom")S.azSound="tone"}
+}
+function getLoc(){
+ if(S.city==="gps"&&S.gps)return{lat:S.gps.lat,lng:S.gps.lng,tz:undefined,ur:S.gps.name,en:S.gps.name};
+ return CITIES.find(c=>c.id===S.city)||CITIES[0];
+}
+function hadj(){return S.hadj==null?(getLoc().tz==="Asia/Karachi"?-1:0):S.hadj}
+function dayTimes(off){
+ const loc=getLoc(),l=localYMD(new Date(),loc.tz),dt=new Date(Date.UTC(l.y,l.m-1,l.d+off));
+ const y=dt.getUTCFullYear(),m=dt.getUTCMonth()+1,d=dt.getUTCDate();
+ return{loc,y,m,d,t:calcTimes(y,m,d,loc),dow:dt.getUTCDay()};
+}
+function nextPrayer(){
+ const now=Date.now();
+ for(let off=0;off<2;off++){const dt=dayTimes(off);for(const p of PR){const v=dt.t[p];if(v>now)return{p,t:v}}}
+ return null;
+}
+function pname(p,fri){return p==="dhuhr"&&fri?nt("jumua"):nt(p)}
+
+/* ---------- Hijri ---------- */
+function arithHijri(dt){
+ const jd=Math.floor(dt.getTime()/86400000)+2440588;
+ let l=jd-1948440+10632;const n=Math.floor((l-1)/10631);l=l-10631*n+354;
+ const j=Math.floor((10985-l)/5316)*Math.floor((50*l)/17719)+Math.floor(l/5670)*Math.floor((43*l)/15238);
+ l=l-Math.floor((30-j)/15)*Math.floor((17719*j)/50)-Math.floor(j/16)*Math.floor((15238*j)/43)+29;
+ const mm=Math.floor((24*l)/709);return{d:l-Math.floor((709*mm)/24),m:mm,y:30*n+j-30};
+}
+function hijriOf(y,m,d,adj){
+ const dt=new Date(Date.UTC(y,m-1,d+(adj||0),12));
+ try{
+  const o={};new Intl.DateTimeFormat("en-u-ca-islamic-umalqura",{day:"numeric",month:"numeric",year:"numeric",timeZone:"UTC"}).formatToParts(dt).forEach(p=>{o[p.type]=p.value});
+  const r={d:parseInt(o.day),m:parseInt(o.month),y:parseInt(o.year)};
+  if(r.d>0&&r.m>0&&r.y>1000)return r;
+ }catch(e){}
+ return arithHijri(dt);
+}
+const hText=h=>h.d+" "+nt("hm")[h.m-1]+" "+h.y;
+const gText=(y,m,d)=>d+" "+nt("gm")[m-1]+" "+y;
+
+/* ---------- navigation ---------- */
+let curTab="quiz",pDay=0,calY=null,calM=null,calSel=null,lastNx="";
+function renderNav(){
+ const e=document.getElementById("nav");if(!e)return;
+ const it=[["quiz","🧠","tQuiz"],["prayer","🕌","tPrayer"],["cal","📅","tCal"],["set","⚙️","tSet"]];
+ e.innerHTML=it.map(x=>`<button class="${curTab===x[0]?"on":""}" onclick="go('${x[0]}')"><span>${x[1]}</span>${nt(x[2])}</button>`).join("");
+}
+function go(tab){
+ clearInterval(timer);
+ if(tab==="quiz")home();
+ else if(tab==="prayer"){pDay=0;prayerPage()}
+ else if(tab==="cal")calPage(0,true);
+ else settingsPage();
+}
+function rerender(){if(curTab==="prayer")prayerPage();else if(curTab==="set")settingsPage()}
+
+/* ---------- prayer page ---------- */
+function qiblaInfo(loc){
+ const p1=loc.lat*dtr,p2=21.4225*dtr,dl=(39.8262-loc.lng)*dtr;
+ const y=Math.sin(dl)*Math.cos(p2),x=Math.cos(p1)*Math.sin(p2)-Math.sin(p1)*Math.cos(p2)*Math.cos(dl);
+ const b=(Math.atan2(y,x)*rtd+360)%360;
+ const a=Math.sin((p2-p1)/2)**2+Math.cos(p1)*Math.cos(p2)*Math.sin(dl/2)**2;
+ return{b,km:2*6371*Math.asin(Math.sqrt(a)),dir:["N","NE","E","SE","S","SW","W","NW"][Math.round(b/45)%8]};
+}
+function prayerPage(){
+ curTab="prayer";clearInterval(timer);refresh();
+ const dt=dayTimes(pDay),loc=dt.loc,fri=dt.dow===5;
+ const hj=hijriOf(dt.y,dt.m,dt.d,hadj()),ram=hj.m===9;
+ const nx=nextPrayer();lastNx=nx?nx.p+nx.t:"";
+ const icon={fajr:"🌅",sunrise:"☀️",dhuhr:"🌞",asr:"🌤️",maghrib:"🌇",isha:"🌙"};
+ const rows=["fajr","sunrise","dhuhr","asr","maghrib","isha"].map(k=>{
+  const v=dt.t[k],isNx=pDay===0&&nx&&nx.p===k&&nx.t===v;
+  const tag=ram&&k==="fajr"?nt("sehri"):ram&&k==="maghrib"?nt("iftar"):"";
+  const bell=k==="sunrise"?`<span style="width:34px"></span>`:`<button class="bell" onclick="togAz('${k}')">${S.azan[k]?"🔔":"🔕"}</button>`;
+  return `<div class="prow ${isNx?"nx":""}"><span>${icon[k]} ${pname(k,fri)}${tag?`<small>${tag}</small>`:""}${isNaN(v)?`<small>${nt("hiLat")}</small>`:""}</span><span style="display:flex;align-items:center;gap:6px"><b style="direction:ltr">${fmtT(v,loc.tz)}</b>${bell}</span></div>`;
+ }).join("");
+ const q=qiblaInfo(loc);
+ const svg=`<svg viewBox="0 0 120 120" width="120" height="120" style="color:var(--tx)"><circle cx="60" cy="60" r="52" fill="none" stroke="currentColor" opacity=".3"/><text x="60" y="13" text-anchor="middle" font-size="11" fill="currentColor">N</text><g transform="rotate(${q.b.toFixed(1)} 60 60)"><line x1="60" y1="62" x2="60" y2="22" stroke="#e8b931" stroke-width="5" stroke-linecap="round"/><polygon points="60,10 52,26 68,26" fill="#e8b931"/></g><circle cx="60" cy="60" r="4" fill="currentColor"/></svg>`;
+ $("main").innerHTML=`
+ <div class="nxbox">
+  <div style="opacity:.85">${nt("next")}</div>
+  <div style="font-size:26px;margin:2px 0"><span id="nxName">—</span> · <span id="nxTime" style="direction:ltr;display:inline-block">—</span></div>
+  <div class="ncd" id="nxLeft">--:--:--</div>
+ </div>
+ <div class="card ${rtl()}">
+  <div class="top" style="direction:ltr;margin-bottom:4px">
+   <button class="bell" style="font-size:24px;background:none" onclick="pDay--;prayerPage()">‹</button>
+   <div class="center"><b>${nt("wd")[dt.dow]}، ${gText(dt.y,dt.m,dt.d)}</b><div class="exp" style="margin:0">${hText(hj)}</div><div class="exp" style="margin:0">📍 ${loc[lang]}</div></div>
+   <button class="bell" style="font-size:24px;background:none" onclick="pDay++;prayerPage()">›</button>
+  </div>
+  ${rows}
+  <div class="row" style="margin-top:10px;justify-content:center;gap:8px"><button class="btn ghost" style="margin:0;width:auto;padding:10px 16px" onclick="fireAzan('dhuhr',true)">${nt("test")}</button></div>
+  <div class="note">${nt("methodNote")}</div>
+ </div>
+ <div class="card center ${rtl()}">
+  <h3>🕋 ${nt("qibla")}</h3>
+  ${svg}
+  <div><b style="font-size:22px">${q.b.toFixed(0)}°</b> · ${nt(q.dir)}</div>
+  <div class="exp">${nt("qFrom")} · ${nt("qDist")}: ${Math.round(q.km).toLocaleString("en-US")} ${nt("km")}</div>
+ </div>`;
+ updateNextUI();
+}
+function togAz(p){S.azan[p]=S.azan[p]?0:1;save();syncNative();rerender()}
+
+/* ---------- live countdown (prayer page + quiz home) ---------- */
+function updateNextUI(){
+ const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
+ const nx=nextPrayer();
+ if(!nx){set("nxName","—");set("nxTime","");set("nxLeft","");set("mini","");return}
+ const loc=getLoc(),fri=dayTimes(0).dow===5;
+ const left=Math.max(0,Math.floor((nx.t-Date.now())/1000));
+ const cd=[Math.floor(left/3600),Math.floor(left%3600/60),left%60].map(x=>String(x).padStart(2,"0")).join(":");
+ set("nxName",pname(nx.p,fri));
+ set("nxTime",fmtT(nx.t,loc.tz));set("nxLeft",cd);
+ set("mini","🕌 "+nt("next")+": "+pname(nx.p,fri)+" "+fmtT(nx.t,loc.tz)+" · "+cd);
+ const key=nx.p+nx.t;
+ if(curTab==="prayer"&&pDay===0&&lastNx&&key!==lastNx)prayerPage();
+}
+
+/* ---------- calendar ---------- */
+function calPage(shift,reset){
+ curTab="cal";clearInterval(timer);
+ const loc=getLoc(),l=localYMD(new Date(),loc.tz);
+ if(reset||calY==null){calY=l.y;calM=l.m;calSel=l.d}
+ if(shift){calM+=shift;if(calM<1){calM=12;calY--}if(calM>12){calM=1;calY++}calSel=null}
+ const dim=new Date(Date.UTC(calY,calM,0)).getUTCDate();
+ const inThis=(calY===l.y&&calM===l.m);
+ if(calSel==null)calSel=inThis?l.d:1;
+ refresh();
+ const adj=hadj(),sdow=new Date(Date.UTC(calY,calM-1,1)).getUTCDay();
+ const wdShort=lang==="ur"?nt("wd"):nt("wd").map(x=>x.slice(0,3));
+ let cells=wdShort.map((w,i)=>`<div class="wd" style="${i===5?"color:var(--g);font-weight:bold":""}">${w}</div>`).join("");
+ for(let i=0;i<sdow;i++)cells+=`<div class="dc empty"></div>`;
+ for(let d=1;d<=dim;d++){
+  const h=hijriOf(calY,calM,d,adj),ev=EV[h.m+"-"+h.d],fri=(sdow+d-1)%7===5;
+  cells+=`<button class="dc ${fri?"fri":""} ${inThis&&d===l.d?"today":""} ${d===calSel?"sel":""}" onclick="calSelect(${d})"><b>${d}</b><small>${h.d}</small>${ev?"<i></i>":""}</button>`;
+ }
+ const h1=hijriOf(calY,calM,1,adj),h2=hijriOf(calY,calM,dim,adj),hm=nt("hm");
+ const hr=h1.m===h2.m?`${hm[h1.m-1]} ${h1.y}`:h1.y===h2.y?`${hm[h1.m-1]} – ${hm[h2.m-1]} ${h1.y}`:`${hm[h1.m-1]} ${h1.y} – ${hm[h2.m-1]} ${h2.y}`;
+ const sh=hijriOf(calY,calM,calSel,adj),se=EV[sh.m+"-"+sh.d];
+ const sdw=new Date(Date.UTC(calY,calM-1,calSel)).getUTCDay();
+ const up=upcoming().map(u=>{
+  const when=u.i===0?nt("today"):u.i===1?nt("tomorrow"):u.i+" "+nt("daysLeft");
+  return `<div class="rv"><b>${u.e[lang]}</b><div class="exp" style="margin:2px 0 0">${gText(u.y,u.m,u.d)} · ${hText(u.h)} · ${when}</div></div>`;
+ }).join("");
+ $("main").innerHTML=`
+ <div class="card ${rtl()}">
+  <div class="top" style="direction:ltr">
+   <button class="bell" style="font-size:26px;background:none" onclick="calPage(-1)">‹</button>
+   <div class="center"><b style="font-size:18px">${nt("gm")[calM-1]} ${calY}</b><div class="exp" style="margin:0">${hr}</div></div>
+   <button class="bell" style="font-size:26px;background:none" onclick="calPage(1)">›</button>
+  </div>
+  <div class="cgrid">${cells}</div>
+  <div class="exp center" style="margin-top:10px"><b>${nt("wd")[sdw]}، ${gText(calY,calM,calSel)}</b><br>${hText(sh)}<br>${se?`<span style="color:var(--bad);font-weight:bold">● ${se[lang]}</span>`:nt("noEvent")}</div>
+  <div class="center"><button class="btn ghost" style="width:auto;display:inline-block;padding:8px 16px" onclick="calPage(0,true)">${nt("today")}</button></div>
+ </div>
+ <div class="card ${rtl()}"><h3>${nt("upcoming")}</h3>${up}<div class="note">${nt("calNote")}</div></div>`;
+}
+function calSelect(d){calSel=d;calPage(0)}
+function upcoming(){
+ const loc=getLoc(),l=localYMD(new Date(),loc.tz),res=[];
+ for(let i=0;i<420&&res.length<6;i++){
+  const dt=new Date(Date.UTC(l.y,l.m-1,l.d+i)),y=dt.getUTCFullYear(),m=dt.getUTCMonth()+1,d=dt.getUTCDate();
+  const h=hijriOf(y,m,d,hadj()),e=EV[h.m+"-"+h.d];
+  if(e)res.push({i,y,m,d,h,e});
+ }
+ return res;
+}
+
+/* ---------- settings ---------- */
+function setCity(v){S.city=v;save();lastNx="";syncNative();settingsPage()}
+function setMethod(v){S.method=v;save();syncNative();settingsPage()}
+function setAsr(v){S.asr=+v;save();syncNative();settingsPage()}
+function setHadj(dl){S.hadj=Math.max(-2,Math.min(2,hadj()+dl));save();settingsPage()}
+function setLang2(l){lang=l;try{localStorage.setItem("iq_lang",l)}catch(e){}syncNative();settingsPage()}
+function setSnd(v){S.azSound=v;save();syncNative();settingsPage()}
+function useGPS(){
+ if(!navigator.geolocation){toast(nt("noGps"));return}
+ toast(nt("locating"));
+ navigator.geolocation.getCurrentPosition(pos=>{
+  S.gps={lat:+pos.coords.latitude.toFixed(4),lng:+pos.coords.longitude.toFixed(4),name:nt("myLoc")};
+  S.city="gps";save();lastNx="";syncNative();settingsPage();
+ },()=>toast(nt("gpsFail")),{timeout:15000,maximumAge:3600000});
+}
+async function askNotif(){
+ try{await Notification.requestPermission()}catch(e){}
+ settingsPage();
+}
+async function pickAudio(inp){
+ const f=inp&&inp.files&&inp.files[0];if(!f)return;
+ if(f.size>10*1024*1024){toast(nt("tooBig"));return}
+ if(f.type&&!f.type.startsWith("audio")){toast(nt("badFile"));return}
+ try{await idbSet("azan",f);S.azFile=f.name;S.azSound="custom";save();toast(nt("saved"))}catch(e){toast("Error: "+e.message)}
+ settingsPage();
+}
+async function delAudio(){if(NATIVE){try{AndroidBridge.clearAzan()}catch(e){}}try{await idbDel("azan")}catch(e){}S.azFile="";if(S.azSound==="custom")S.azSound="tone";save();syncNative();settingsPage()}
+function settingsPage(){
+ curTab="set";clearInterval(timer);refresh();
+ const pk=CITIES.filter(c=>c.pk),ot=CITIES.filter(c=>!c.pk);
+ const opt=c=>`<option value="${c.id}" ${S.city===c.id?"selected":""}>${c[lang]}</option>`;
+ const cityHtml=`<select onchange="setCity(this.value)">${S.gps?`<option value="gps" ${S.city==="gps"?"selected":""}>📍 ${S.gps.name}</option>`:""}<optgroup label="${nt("pak")}">${pk.map(opt).join("")}</optgroup><optgroup label="${nt("intl")}">${ot.map(opt).join("")}</optgroup></select>`;
+ const methHtml=`<select onchange="setMethod(this.value)">${Object.keys(METH).map(k=>`<option value="${k}" ${S.method===k?"selected":""}>${METH[k][lang]}</option>`).join("")}</select>`;
+ const asrHtml=`<select onchange="setAsr(this.value)"><option value="2" ${S.asr==2?"selected":""}>${nt("asr2")}</option><option value="1" ${S.asr==1?"selected":""}>${nt("asr1")}</option></select>`;
+ const azRows=PR.map(p=>`<label class="setrow"><span>${nt(p)}</span><input type="checkbox" ${S.azan[p]?"checked":""} onchange="togAz('${p}')"></label>`).join("");
+ const hasF=!!S.azFile;
+ const snd=[["custom",nt("sndCustom")+(hasF?" ("+S.azFile+")":""),!hasF],["tone",nt("sndTone"),false],["silent",nt("sndSilent"),false]]
+  .map(x=>`<label class="setrow"><span>${x[1]}</span><input type="radio" name="azs" ${S.azSound===x[0]?"checked":""} ${x[2]?"disabled":""} onchange="setSnd('${x[0]}')"></label>`).join("");
+ const np=typeof Notification!=="undefined"?Notification.permission:"unsupported";
+ const nHtml=np==="granted"?nt("notifOn"):np==="unsupported"?"—":`<button class="btn ghost" style="margin:0" onclick="askNotif()">${nt("notifAsk")}</button>`;
+ $("main").innerHTML=`
+ <div class="card ${rtl()}">
+  <h3>🌍 ${nt("city")}</h3>${cityHtml}
+  <button class="btn ghost" onclick="useGPS()">${nt("useGps")}</button>
+  <h3>${nt("method")}</h3>${methHtml}
+  <h3>${nt("asrM")}</h3>${asrHtml}
+  <div class="setrow"><span>${nt("hadj")}</span><span class="stp"><button onclick="setHadj(-1)">−</button><b style="min-width:24px;text-align:center">${hadj()}</b><button onclick="setHadj(1)">+</button></span></div>
+  <div class="note">${nt("hadjNote")}</div>
+ </div>
+ <div class="card ${rtl()}">
+  <h3>🔔 ${nt("azan")}</h3>
+  <div class="exp" style="margin-top:0">${nt("azOnOff")}</div>${azRows}
+  <div class="exp">${nt("azSound")}</div>${snd}
+  ${NATIVE?`<button class="btn ghost" style="margin-top:10px" onclick="AndroidBridge.pickAzan()">📂 ${nt("upload")}</button>`:`<label class="btn ghost" style="cursor:pointer;margin-top:10px">📂 ${nt("upload")}<input type="file" accept="audio/*" style="display:none" onchange="pickAudio(this)"></label>`}
+  ${hasF?`<button class="btn ghost" onclick="delAudio()">🗑 ${nt("remove")}</button>`:`<div class="note">${nt("noFile")}</div>`}
+  <button class="btn gold" onclick="fireAzan('dhuhr',true)">${nt("test")}</button>
+  ${NATIVE?nativeRows()+`<div class="note">${nt("azNative")}</div>`:`<div class="setrow"><span>${nt("notif")}</span><span>${nHtml}</span></div><div class="note">${nt("azKeep")}</div>`}
+ </div>
+ <div class="card ${rtl()}">
+  <h3>${nt("lang")}</h3>
+  <div class="lang"><button class="${lang==="ur"?"on":""}" onclick="setLang2('ur')">اردو</button><button class="${lang==="en"?"on":""}" onclick="setLang2('en')">English</button></div>
+ </div>`;
+}
+
+/* ---------- azan audio (custom file stored in IndexedDB) ---------- */
+function idbOpen(){return new Promise((res,rej)=>{if(typeof indexedDB==="undefined"){rej(new Error("no IndexedDB"));return}const r=indexedDB.open("iq_db",1);r.onupgradeneeded=()=>r.result.createObjectStore("f");r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+async function idbSet(k,v){const db=await idbOpen();return new Promise((res,rej)=>{const tx=db.transaction("f","readwrite");tx.objectStore("f").put(v,k);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error)})}
+async function idbGet(k){const db=await idbOpen();return new Promise((res,rej)=>{const q=db.transaction("f").objectStore("f").get(k);q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)})}
+async function idbDel(k){const db=await idbOpen();return new Promise((res,rej)=>{const tx=db.transaction("f","readwrite");tx.objectStore("f").delete(k);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error)})}
+
+let azAudio=null,azHide=null;
+function toneAz(f,d,delay){
+ try{
+  AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+  const o=AC.createOscillator(),g=AC.createGain(),t0=AC.currentTime+(delay||0);
+  o.type="sine";o.frequency.value=f;
+  g.gain.setValueAtTime(0.0001,t0);g.gain.exponentialRampToValueAtTime(.25,t0+.05);g.gain.exponentialRampToValueAtTime(.001,t0+d);
+  o.connect(g);g.connect(AC.destination);o.start(t0);o.stop(t0+d);
+ }catch(e){}
+}
+function playTone(){[523,659,784,659,523,784,880,784].forEach((f,i)=>toneAz(f,.55,i*.6));azHide=setTimeout(hideAz,5600)}
+function showAz(name){
+ const e=document.getElementById("azov");if(!e)return;
+ e.innerHTML=`<div class="card center ${rtl()}"><div class="big">🕌</div><h2>${nt("azTime")}: ${name}</h2><button class="btn" onclick="playAzNow()">${nt("playNow")}</button><button class="btn ghost" onclick="stopAzan()">${nt("stop")}</button></div>`;
+ e.classList.remove("hide");
+}
+function hideAz(){const e=document.getElementById("azov");if(e)e.classList.add("hide")}
+function stopAzan(){
+ if(NATIVE){try{AndroidBridge.stopAzan()}catch(e){}}
+ clearTimeout(azHide);
+ try{if(azAudio){azAudio.pause();azAudio=null}}catch(e){}
+ hideAz();
+}
+async function playAzNow(){
+ try{if(azAudio){azAudio.pause();azAudio=null}}catch(e){}
+ clearTimeout(azHide);
+ if(S.azSound==="silent")return;
+ if(S.azSound==="custom"){
+  try{
+   const b=await idbGet("azan");
+   if(b){azAudio=new Audio(URL.createObjectURL(b));azAudio.onended=hideAz;await azAudio.play();return}
+  }catch(e){}
+ }
+ playTone();
+}
+function fireAzan(p,test){
+ if(NATIVE){try{AndroidBridge.testAzan(pname(p,dayTimes(0).dow===5))}catch(e){}return}
+ const fri=dayTimes(0).dow===5;
+ showAz(pname(p,fri));
+ try{navigator.vibrate&&navigator.vibrate([300,150,300])}catch(e){}
+ try{
+  if(typeof Notification!=="undefined"&&Notification.permission==="granted"&&!test)
+   new Notification("🕌 "+nt("azTime")+": "+pname(p,fri),{tag:"azan-"+p,requireInteraction:false});
+ }catch(e){}
+ playAzNow();
+}
+
+/* ---------- scheduler: runs every second while the app is open ---------- */
+function azTick(){
+ try{
+  if(NATIVE){updateNextUI();return}
+  const dt=dayTimes(0),now=Date.now();
+  for(const p of PR){
+   const v=dt.t[p];if(!(v>0)||!S.azan[p])continue;
+   const key=dt.y+"-"+dt.m+"-"+dt.d+"-"+p;
+   if(now>=v&&now<v+90000&&S.lastAz!==key){S.lastAz=key;save();fireAzan(p)}
+  }
+  updateNextUI();
+ }catch(e){}
+}
+
+/* ---------- start ---------- */
+initIslamic();
+home();
+syncNative();
+setInterval(azTick,1000);
+try{document.addEventListener("visibilitychange",()=>{if(!document.hidden){syncNative();if(NATIVE&&curTab==="set")settingsPage()}})}catch(e){}
+try{document.addEventListener("pointerdown",()=>{try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume()}catch(e){}},{once:true})}catch(e){}
+</script>
+<script src="pro.js"></script>
+<script src="pro2.js"></script>
+</body>
+</html>
